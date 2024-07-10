@@ -18,20 +18,18 @@ pipe = DiffusionPipeline.from_pretrained("damo-vilab/text-to-video-ms-1.7b", tor
 pipe.scheduler = DPMSolverMultistepScheduler.from_config(pipe.scheduler.config)
 pipe.enable_model_cpu_offload()
 
-
 class VideoRequest(BaseModel):
     prompt: str
     num_inference_steps: int = 50
     guidance_scale: float = 9.0
-
 
 @app.post("/generate-video")
 async def generate_video(request: VideoRequest):
     try:
         # 비디오 생성
         video_frames = pipe(
-            request.prompt,
-            num_inference_steps=request.num_inference_steps,
+            request.prompt, 
+            num_inference_steps=request.num_inference_steps, 
             guidance_scale=request.guidance_scale
         ).frames
 
@@ -49,7 +47,6 @@ async def generate_video(request: VideoRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-
 # ngrok 설정 (이미 인증을 완료했으므로 이 줄은 주석)
 # !ngrok config add-authtoken 2j27vD2VtJOyWNLlG1Hhe6aUTVl_782M5FWdcUq833RhR4ZhE
 
@@ -61,6 +58,6 @@ print('Public URL:', ngrok_tunnel.public_url)
 if __name__ == "__main__":
     config = uvicorn.Config(app, host="0.0.0.0", port=8000)
     server = uvicorn.Server(config)
-
+    
     # Use asyncio.create_task to run the server within the existing event loop
     asyncio.create_task(server.serve())
