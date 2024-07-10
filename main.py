@@ -8,7 +8,7 @@ from pydantic import BaseModel
 from diffusers import DiffusionPipeline, DPMSolverMultistepScheduler
 from diffusers.utils import export_to_video
 import uvicorn
-from pyngrok import ngrok
+from pyngrok import ngrok, conf
 import asyncio
 
 app = FastAPI()
@@ -47,8 +47,8 @@ async def generate_video(request: VideoRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-# ngrok 설정 (이미 인증을 완료했으므로 이 줄은 주석)
-# !ngrok config add-authtoken 2j27vD2VtJOyWNLlG1Hhe6aUTVl_782M5FWdcUq833RhR4ZhE
+# Configure ngrok with your authtoken
+conf.get_default().auth_token = "2j27vD2VtJOyWNLlG1Hhe6aUTVl_782M5FWdcUq833RhR4ZhE"  # Replace with your actual authtoken
 
 # ngrok 터널 생성
 ngrok_tunnel = ngrok.connect(8000)
