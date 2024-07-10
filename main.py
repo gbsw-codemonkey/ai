@@ -38,7 +38,7 @@ async def generate_video(request: VideoRequest):
         video_frames = (video_frames * 255).astype("uint8")
 
         # 색상 향상
-        video_frames = np.clip(video_frames * 1.2, 0, 255).astype("uint8")
+        #video_frames = np.clip(video_frames * 1.2, 0, 255).astype("uint8")
 
         # 비디오 저장
         video_path = export_to_video(video_frames)
